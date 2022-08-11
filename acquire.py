@@ -45,13 +45,13 @@ def get_telco_data():
         telco_sql = """
         SELECT * 
         FROM customers
-        JOIN customer_payments USING (customer_id)
-        JOIN customer_contracts USING (customer_id)
+        JOIN contract_types USING (contract_type_id)
+        JOIN payment_types USING (payment_type_id)
         JOIN internet_service_types USING (internet_service_type_id)
         ;
         """
 
-        telco.url = f'mysql+pymysql://{user}:{password}@{host}/telco_churn'
+        telco_url = f'mysql+pymysql://{user}:{password}@{host}/telco_churn'
 
         return pd.read_sql(telco_sql, telco_url)
 
