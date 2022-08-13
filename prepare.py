@@ -1,4 +1,17 @@
+# import section ---
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from pydataset import data
+
+from sklearn.model_selection import train_test_split
+from sklearn.impute import SimpleImputer
+
+import warnings
+warnings.filterwarnings("ignore")
+
+import acquire
+# ---
 
 def prep_iris(df_iris):
     """
@@ -11,7 +24,8 @@ def prep_iris(df_iris):
     
     return df_iris
 
-def prep_titanic(df_titanic):
+
+def prep_titanic(df):
     """
     """
     df_titanic.drop(['Unnamed: 0', 'embarked', 'class', 'age', 'deck'], axis=1, inplace=True)
@@ -25,6 +39,23 @@ def prep_titanic(df_titanic):
     
     return df_titanic
 
+#duplicated and made adjustments to bring it in line with function from exploratory analysis lesson
+
+def prep_titanicb(df_titanic):
+    """
+    """
+    df_titanic = df_titanic[(df_titanic.age.notna()) & (df_titanic.embarked.notna())]
+    df_titanic.drop(['Unnamed: 0', 'class', 'deck'], axis=1, inplace=True)
+
+    dummy_titanic = pd.get_dummies(df_titanic[['sex', 'embark_town']], dummy_na=False, prefix=['sex', 'embark'])
+    
+    df_titanic = pd.concat([df_titanic, dummy_titanic], axis=1)
+    
+    df_titanic.drop(['sex', 'embark_town', 'sex_male'], axis=1, inplace=True)
+    
+    df_titanic.rename(columns={"sex_female": "is_female"}, inplace=True)
+    
+    return df_titanic
 
 def prep_telco(df_telco):
     """
@@ -55,4 +86,12 @@ def prep_telco(df_telco):
     
     return df_telco
 
+def split_data(df, target):
+    """
+    """
+    
+    train, test = train_test_split(df, test_size=.2, random_state=123, stratify=df[target])
+    train, validate = train_test_split(train, test_size=.25, random_state=123, stratify=train[target])
+    
+    return train, validate, test
 
