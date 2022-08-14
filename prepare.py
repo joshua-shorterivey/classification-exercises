@@ -25,7 +25,7 @@ def prep_iris(df_iris):
     return df_iris
 
 
-def prep_titanic(df):
+def prep_titanic(df_titanic):
     """
     """
     df_titanic.drop(['Unnamed: 0', 'embarked', 'class', 'age', 'deck'], axis=1, inplace=True)
@@ -92,6 +92,13 @@ def split_data(df, target):
     
     train, test = train_test_split(df, test_size=.2, random_state=123, stratify=df[target])
     train, validate = train_test_split(train, test_size=.25, random_state=123, stratify=train[target])
+    
+    #verify shapes of prepared df, train, validate, and test subsets
+    print(f'Prepared df: {df.shape}')
+    print()
+    print(f'Train: {train.shape}')
+    print(f'Validate: {validate.shape}')
+    print(f'Test: {test.shape}')
     
     return train, validate, test
 
